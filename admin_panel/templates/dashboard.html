@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এডমিন ড্যাশবোর্ড - SI STUDENT ACCOUNT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar h1 {
+            font-size: 20px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stats-grid .stat-card:nth-child(2) .value {
+            color: #764ba2;
+        }
+        
+        .stats-grid .stat-card:nth-child(3) .value {
+            color: #f093fb;
+        }
+        
+        .stats-grid .stat-card:nth-child(4) .value {
+            color: #4facfe;
+        }
+        
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .menu-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-decoration: none;
+        }
+        
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .menu-item-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🎓 SI STUDENT ACCOUNT</h1>
+        <div>
+            <span>👤 {{ session.get('admin_username', 'Admin') }}</span>
+            <a href="{{ url_for('logout') }}">🚪 লগআউট</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% if error %}
+        <div class="section" style="background: #fee; border-left: 4px solid #c33;">
+            <p style="color: #c33;">❌ {{ error }}</p>
+        </div>
+        {% endif %}
+        
+        <div class="section">
+            <h2>📊 সিস্টেম স্ট্যাটিস্টিক্স</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>মোট স্টুডেন্ট</h3>
+                    <div class="value">{{ stats.total_students }}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>সক্রিয় স্টুডেন্ট</h3>
+                    <div class="value">{{ stats.active_students }}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>মোট ক্রেডিট</h3>
+                    <div class="value">{{ stats.total_credit_loaded }}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>মোট কাজ</h3>
+                    <div class="value">{{ stats.total_works }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🛠️ এডমিন মেনু</h2>
+            <div class="menu">
+                <a href="#" class="menu-item">
+                    <div class="menu-item-icon">👥</div>
+                    <div class="menu-item-text">স্টুডেন্ট ম্যানেজমেন্ট</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="menu-item-icon">💰</div>
+                    <div class="menu-item-text">ক্রেডিট ম্যানেজমেন্ট</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="menu-item-icon">📊</div>
+                    <div class="menu-item-text">রিপোর্ট</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="menu-item-icon">⚙️</div>
+                    <div class="menu-item-text">সিস্টেম সেটিংস</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📝 সম্পন্ন কাজ</h2>
+            <p>সম্পন্ন: <strong>{{ stats.completed_works }} / {{ stats.total_works }}</strong> ({{ stats.completion_rate }})</p>
+            <div style="width: 100%; background: #eee; height: 20px; border-radius: 10px; margin-top: 10px; overflow: hidden;">
+                <div style="width: {{ stats.completion_rate }}; background: linear-gradient(90deg, #667eea, #764ba2); height: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>🎓 SI STUDENT ACCOUNT v1.0 | সকল অধিকার সংরক্ষিত © 2026</p>
+    </div>
+</body>
+</html>
